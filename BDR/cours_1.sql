@@ -71,3 +71,24 @@ create table commande (id_commande varchar(50) primary key);
 
 -- Create Table Categories in our Supermarche Information System's
 create table categories (id_categorie varchar(50) primary key);
+
+-- Create Table Technicien de surface in our Supermarche Information System's
+create table Tech_surface (id_tech_surface varchar(50) primary key);
+
+-- Create Table Caissier de surface in our Supermarche Information System's
+create table Caissier (id_caissier varchar(50) primary key, experience varchar(50));
+
+-- Create Table Type_client de surface in our Supermarche Information System's
+create table Type_client (id_type_cleint varchar(50) primary key, type_client varchar(50));
+
+--Ajouter un attribut (cle etrangere) dans une table
+alter table article add id_casier varchar(50) not null after id_article;
+
+--Definir l'attribut etrangere comme cle etrangere
+alter table article add constraint FK_id_caisier foreign key(id_casier) references casier(id_casier);
+
+--pour changer le nom de l'attribut
+ alter table personne change prenom prenom_pers varchar(50);
+
+ --renommer le nom de la table
+ alter table nom_de_la_table rename nom_de_table
