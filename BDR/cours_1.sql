@@ -12,7 +12,6 @@ grant all privileges on *.* to ipsldirecteur@localhost identified by 'jarvis' ;
 grant all privileges on ipsl2023.* to ipsletudiant@localhost identified by 'jarvis207' ;
 
 -- Crate a database as ipslSupermarche name's
-
 create database ipslSupermarche ;
 
 -- Connect as the user ipsldirecteur
@@ -31,44 +30,44 @@ create table gerant (id_gerant varchar(50) primary key, experience varchar(50), 
 create table agent_securite(id_agent_sec varchar(50) primary key, grade varchar(50), experience varchar(50), heures_de_services time );
 
 -- Create Table  Etiquette in our Supermarche Information System's
-create table  etiquette (id_Etiquette varchar(50), nature_Etiquette varchar(50));
+create table  etiquette (id_Etiquette varchar(50) primary key, nature_Etiquette varchar(50));
 
 -- Create Table  Casier in our Supermarche Information System's
-create table  casier (id_Casier varchar(50), dimension varchar(50), position varchar(50), capacite decimal(50));
+create table  casier (id_Casier varchar(50) primary key, dimension varchar(50), position varchar(50), capacite decimal(50));
 
 -- Create Fournisseur  Casier in our Supermarche Information System's
-create table  fournisseur (id_Fournisseur varchar(50), linea varchar(50), agrement varchar(50), registre_de_commerce varchar(50));
+create table  fournisseur (id_Fournisseur varchar(50) primary key, linea varchar(50), agrement varchar(50), registre_de_commerce varchar(50));
 
 -- Create Table  Client in our Supermarche Information System's
-create table  client (id_Client varchar(50));
+create table  client (id_Client varchar(50) primary key);
 
 -- Create Table Rayonniste  Cas in our Supermarche Information System's
-create table  royonniste (id_royonniste varchar(50), experience varchar(50));
+create table  royonniste (id_royonniste varchar(50) primary key, experience varchar(50));
 
 -- Create Table Local  in our Supermarche Information System's
-create table local  (id_local varchar(50), nom_local varchar(50), superficie_local decimal(50));
+create table local  (id_local varchar(50) primary key, nom_local varchar(50), superficie_local decimal(50));
 
 -- Create Table  Rayon in our Supermarche Information System's
-create table  rayon (id_rayon varchar(50), emplacement varchar(50), longueur decimal(50), nombre_de_casier int(100), le_type varchar(50));
+create table  rayon (id_rayon varchar(50) primary key, emplacement varchar(50), longueur decimal(50), nombre_de_casier int(100), le_type varchar(50));
 
 -- Create Table  Caisse in our Supermarche Information System's
-create table caisse   (id_caisse varchar(50));
+create table caisse   (id_caisse varchar(50) primary key);
 
 -- Create Table Adresse  in our Supermarche Information System's
-create table adresse  (id_adresse varchar(50), region  varchar(50), ville varchar(50), code_postal varchar(50), residence varchar(50));
+create table adresse  (id_adresse varchar(50) primary key, region  varchar(50), ville varchar(50), code_postal varchar(50), residence varchar(50));
 
 -- Create Table Livreur in our Supermarche Information System's
-create table livreur  (id_livreur varchar(50), nature_permis varchar(50), moyen_de_transport varchar(50));
+create table livreur  (id_livreur varchar(50) primary key, nature_permis varchar(50), moyen_de_transport varchar(50));
 
 -- Create Table Facture in our Supermarche Information System's
-create table facture (id_facture varchar(50), date_facture date, montant decimal(10,2));
+create table facture (id_facture varchar(50) primary key, date_facture date, montant decimal(10,2));
 
 
 -- Create Table Avoirs in our Supermarche Information System's
-create table avoirs (id_avoirs varchar(50), montant decimal(10,2),date_avoirs date, duree_de_validite time);
+create table avoirs (id_avoirs varchar(50) primary key, montant decimal(10,2),date_avoirs date, duree_de_validite time);
 
 -- Create Table Commande in our Supermarche Information System's
-create table commande (id_commande varchar(50));
+create table commande (id_commande varchar(50) primary key);
 
 -- Create Table Categories in our Supermarche Information System's
-create table categories (id_categorie varchar(50));
+create table categories (id_categorie varchar(50) primary key);
