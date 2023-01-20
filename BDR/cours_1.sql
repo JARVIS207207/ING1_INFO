@@ -9,9 +9,10 @@ create database ipsl2023 ;
 grant all privileges on *.* to ipsldirecteur@localhost identified by 'jarvis' ;
 
 -- Create a new user ipslEtudiant as password ipslEtudiant@ and give the all privileges on ipsl2023 only 
-grant all privileges on ipsl2023.* to ipsletudiant@localhost identified by 'jarvis207 ;
+grant all privileges on ipsl2023.* to ipsletudiant@localhost identified by 'jarvis207' ;
 
 -- Crate a database as ipslSupermarche name's
+
 create database ipslSupermarche ;
 
 -- Connect as the user ipsldirecteur
