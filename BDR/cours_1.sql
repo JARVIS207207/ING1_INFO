@@ -230,3 +230,46 @@ alter table type_client add constraint FK_id_client_of_type_client foreign key(i
 
  --renommer le nom de la table
  alter table nom_de_la_table rename nom_de_table
+
+ 
+
+-----------------------------Ajout des contraintes-------------------------------
+
+-- table article
+alter table article
+alter column nom_article varchar(50) not null;
+
+--table  Avoirs
+alter table avoirs
+alter column
+
+
+--Contraintes de valuation obligatoire
+ALTER TABLE maTable
+ALTER COLUMN maColonne memeType NOT NULL
+
+--Contraintes de clé primaire
+ALTER TABLE maTable
+ADD CONSTRAINT PK_maTable
+  PRIMARY KEY (colonnesConstituantLaCléPrimaire)
+
+--Contraintes de clé étrangère
+ALTER TABLE maTable
+ADD CONSTRAINT FK_maTable_colonneDeCleEtrangere
+  FOREIGN KEY(colonneDeCleEtrangere)
+  REFERENCES tableContenantLaClePrimaireAReferencer(colonneDeClePrimaire)
+
+--Contraintes d’unicité
+ALTER TABLE maTable
+ADD CONSTRAINT UQ_maTable_colonnesConstituantLeTupleQuiDoitEtreUnique
+  UNIQUE (colonnesConstituantLeTupleQuiDoitEtreUnique)
+
+--Contraintes de valeur par défaut :
+ALTER TABLE maTable
+ADD CONSTRAINT DF_maTable_maColonne
+  DEFAULT (uneValeur) FOR (maColonne)
+
+--Contraintes de domaine (CHECK)
+ALTER TABLE maTable
+ADD CONSTRAINT CHK_maTable_maColonne
+CHECK(maColonne [formuleDeVerification]
