@@ -114,12 +114,14 @@ create table livreur  (
 create table facture (
     id_facture varchar(50) primary key,
     date_facture date,
-    montant decimal(10,2));
+    montant_facture decimal(10,2)
+    montant_donne decimal(10,2)
+    montant_de_retour decimal(10,2));
 
 -- Create Table Avoirs in our Supermarche Information System's
 create table avoirs (
     id_avoirs varchar(50) primary key,
-    montant decimal(10,2),
+    montant_avoirs decimal(10,2),
     date_avoirs date,
     duree_de_validite time);
 
@@ -220,6 +222,8 @@ alter table type_client add id_client varchar(50) not null after id_type_client;
 --Definir l'attribut etrangere comme cle etrangere
 alter table type_client add constraint FK_id_client_of_type_client foreign key(id_client) references client(id_client);
 
+alter table personne add constraint FK_id_adresse_of_personne foreign key(id_adresse) references adresse(id_adresse);
+
 
 
 
@@ -231,18 +235,26 @@ alter table type_client add constraint FK_id_client_of_type_client foreign key(i
  --renommer le nom de la table
  alter table nom_de_la_table rename nom_de_table
 
- 
 
 -----------------------------Ajout des contraintes-------------------------------
 
 -- table article
 alter table article
-alter column nom_article varchar(50) not null;
+--alter column nom_article varchar(50) not null;
+modify nom_article varchar(50) not null;
 
 --table  Avoirs
 alter table avoirs
-alter column
+add constraint CHK_avoirs_montant_avoirs
+check(montant_avoirs>=0 AND montant_avoirs<499);
 
+--table personne
+alter table personne 
+add constraint UQ_personne_nom_prenom_mail
+UNIQUE(nom,prenom,mail);
+
+
+-----------------------------CODE POUR AJOUTER LES CONTRAINTES-------------------------------
 
 --Contraintes de valuation obligatoire
 ALTER TABLE maTable
@@ -272,4 +284,11 @@ ADD CONSTRAINT DF_maTable_maColonne
 --Contraintes de domaine (CHECK)
 ALTER TABLE maTable
 ADD CONSTRAINT CHK_maTable_maColonne
-CHECK(maColonne [formuleDeVerification]
+CHECK(maColonne [formuleDeVerification]);
+
+
+-----------------------------INSERTION DES DONNEES-------------------------------
+
+--Table personne
+insert into personne (id_adresse,nom,prenom_pers,mail,telephone,age) values ('jarvis', 'Stark', 'jarvis@gmail.com', '77 777 77 77', '22');
+drop 
