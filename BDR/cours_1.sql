@@ -27,7 +27,7 @@ create table personne (
     prenom_pers varchar(50),
     mail varchar(50),
     telephone varchar(50),
-    age smallint(6)
+    age smallint(6),
     sexe varchar(5));
 
 -- Create Table Article in our Supermarche Information System's
@@ -602,7 +602,7 @@ insert into agent_securite(id_local, grade, experience, heures_de_services)
 
 
 
-
+'
 
 
 
@@ -613,11 +613,11 @@ insert into agent_securite(id_local, grade, experience, heures_de_services)
 
 --La syntaxe pour supprimer des lignes est la suivante :
 
-DELETE FROM `table`
+DELETE FROM table
 WHERE condition
 
---Par défaut, l’auto-increment débute à la valeur “1” 
---et s’incrémentera de un pour chaque nouvel enregistrement. 
+--Par défaut, lauto-increment débute à la valeur “1” 
+--et sincrémentera de un pour chaque nouvel enregistrement. 
 --Il est possible de modifier la valeur initiale avec la requête SQL suivante :
 
 ALTER TABLE `nom_de__la_table` AUTO_INCREMENT=(v_initial);
