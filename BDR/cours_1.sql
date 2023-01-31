@@ -68,7 +68,7 @@ create table  casier (
 -- Create Fournisseur  Casier in our Supermarche Information System's
 create table  fournisseur (
     id_Fournisseur int(10) primary key auto_increment,
-    linea varchar(50),
+    Ninea varchar(50),
     agrement varchar(50),
     registre_de_commerce varchar(50));
 
@@ -134,7 +134,8 @@ create table commande (
 
 -- Create Table Categories in our Supermarche Information System's
 create table categorie (
-    id_categorie int(10) primary key auto_increment);
+    id_categorie int(10) primary key auto_increment,
+    nom_categorie varchar(50));
 
 -- Create Table Technicien de surface in our Supermarche Information System's
 create table Tech_surface (
@@ -151,7 +152,44 @@ create table Type_client (
     id_type_client int(10) primary key auto_increment,
     type_client varchar(50));
 
+-- Create Table fournir (relation N*N ) 
+create table fournir (
+    id_fournisseur int(10)  ,
+    id_article int(10), 
+   primary key( id_fournisseur,id_article) );
+
+
+-- Create Table contenir (relation N*N ) 
+create table contenir (
+    id_article int(10)  ,
+    id_commande int(10), 
+   primary key(  id_article,id_commande) );
+
 -------------------------------INSERTION DES CLE ETRANGERES-----------------------------
+
+--Ajouter un attribut (cle etrangere) dans une table
+alter table facture add id_commande int(10) not null after id_facture;
+
+--Definir l'attribut etrangere comme cle etrangere
+alter table facture add constraint FK_id_commande_of_facture foreign key(id_commande) references commande(id_commande);
+--
+--Ajouter un attribut (cle etrangere) dans une table
+alter table avoirs add id_facture int(10) not null after id_avoirs;
+
+--Definir l'attribut etrangere comme cle etrangere
+alter table avoirs add constraint FK_id_facture_of_avoirs foreign key(id_facture) references facture(id_facture);
+--
+--Ajouter un attribut (cle etrangere) dans une table
+alter table casier add id_rayon int(10) not null after id_casier ;
+
+--Definir l'attribut etrangere comme cle etrangere
+alter table casier add constraint FK_id_rayon_of_casier foreign key(id_rayon) references rayon(id_rayon);
+
+--Ajouter un attribut (cle etrangere) dans une table
+alter table facture add id_caisse int(10) not null after id_facture;
+
+--Definir l'attribut etrangere comme cle etrangere
+alter table facture add constraint FK_id_caisse_of_facture foreign key(id_caisse) references caisse(id_caisse);
 
 --Ajouter un attribut (cle etrangere) dans une table
 alter table article add id_casier int(10) not null after id_article;
@@ -462,7 +500,7 @@ INSERT INTO `personne` (`id_personne`, `id_adresse`, `nom_pers`, `prenom_pers`, 
 (NULL, '9', 'Sarr', 'Oumoul Khairy ', 'Sarr@gmail.com', '754216985', '30', 'F'),
 (NULL, '19', 'Ba', 'Mya ', 'ba@gmail.com', '754282210', '28', 'F'),
 (NULL, '18', 'Traoré', 'Aya ', 'Aya@gmail.com', '754262210', '28', 'F'),
-(NULL, '4', 'Adja', 'Seck', 'Adja@gmail.com', '754213699', '29', 'F'), 
+(NULL, '4', 'Seck', 'Adja', 'Adja@gmail.com', '754213699', '29', 'F'), 
 (NULL, '16', 'Dieng', 'Fatou ', 'Fatou@gmail.com', '754623524', '32', 'F'), 
 (NULL, '10', 'Diouf', 'Mame Diodio ', 'Diouf@gmail.com', '754126598', '32', 'F'),
 (NULL, '17', 'Fall', 'Aminata ', 'Fall@gmail.com', '785421685', '32', 'F'), 
@@ -471,7 +509,17 @@ INSERT INTO `personne` (`id_personne`, `id_adresse`, `nom_pers`, `prenom_pers`, 
 (NULL, '18', 'Thiam', 'Oumoul ', 'Thiam@gmail.com', '754621358', '34', 'F'), 
 (NULL, '12', 'Diouf', 'Bineta ', 'Diouf@gmail.com', '754213698', '32', 'F'),
 (NULL, '11', 'Diatta', 'Salimata ', 'Diatta@gmail.com', '762135468', '25', 'F'), 
-(NULL, '15', 'Diagne', 'Nafissatou ', 'Diagne@gmail.com', '745213598', '22', 'F');
+(NULL, '15', 'Diagne', 'Nafissatou ', 'Diagne@gmail.com', '745213598', '22', 'F'),
+(NULL, '20', 'Ndour', 'Maurice ', 'Ndour@gmail.com', '754213598', '26', 'M'), 
+(NULL, '15', 'Thiam', 'Djibril ', 'Djibril@gmail.com', '745125987', '27', 'M'), 
+(NULL, '13', 'Diop', 'Pape ', 'Pape@gmail.com', '785412365', '29', 'M'), 
+(NULL, '15', 'Sambe', 'Lamine', 'Lamine@gmail.com', '741258963', '29', 'M'),
+(NULL, '18', 'Faye', 'Mouhammad', 'Faye@gmail.com', '785413214', '27', 'M'), 
+(NULL, '16', 'Ndoye', 'Youssou ', 'Ndoye@gmail.com', '745215874', '26', 'M'), 
+(NULL, '8', 'Faye', 'Amina', 'Faye@gmail.com', '752145982', '24', 'F'), 
+(NULL, '6', 'Sam', 'Fanta', 'Fanta@gmail', '789654124', '25', 'F'), 
+(NULL, '16', 'Ndour', 'Lana', 'lana@gmail.com', '742589632', '28', 'F'), 
+(NULL, '18', 'Gueye', 'Aby', 'Aby@gmail.com', '789652587', '27', 'F');
 
 ---------------------------------------------------------------------------------------
 --Table Local
@@ -531,80 +579,425 @@ VALUES
 (NULL, '11', '5 années d\'expérience'),
 (NULL, '33', '0 année d\'expérience');
 
----------------------------------------------------------------------------------------
---Table
----------------------------------------------------------------------------------------
-
-
-
-insert into personne (id_adresse,nom_pers,prenom_pers,mail,telephone,age,sexe)
-    values (1,'Jarvis', 'Stark', 'jarvis@gmail.com', '77 777 77 77', '22','M');
-
-insert into personne (id_adresse,nom_pers,prenom_pers,mail,telephone,age)
-    values (9,'John', 'Wick', 'john@gmail.com', '77 555 55 55', '45','M');
-
-insert into personne (id_adresse,nom_pers,prenom_pers,mail,telephone,age)
-    values (2,'Khadim', 'Mbow', 'khadim@gmail.com', '77 666 66 77', '27','M');
-    
-insert into personne (id_adresse,nom_pers,prenom_pers,mail,telephone,age)
-    values (6,'Fadel', 'Mouhamed', 'fadel@gmail.com', '77 668 78 77', '10','M');
-
---Table Local
-
-insert into local (id_adresse,nom_local,superficie_local)
-    values (6,'Local Dakar','100 metres carres','');
-
-insert into local (id_adresse,nom_local,superficie_local)
-    values (6,'Local Rufisque','60 metres carres');
-
-insert into local (id_adresse,nom_local,superficie_local)
-    values (1,'Local Pikine ','60 metres carres');
-
-insert into local (id_adresse,nom_local,superficie_local)
-    values (8,'Local Diourbel ','40 metres carres');
-
-insert into local (id_adresse,nom_local,superficie_local)
-    values (5,'Local Thies ','50 metres carres');
-
---Table Gerant
-
-insert into gerant (id_local, experience, specialite, type_de_contrat)
-    values (4,'Experence de 4 ans','Marketing','CDI');
-
-insert into gerant (id_local, experience, specialite, type_de_contrat)
-    values (2,'Experence de 2 ans','Ressources humaines','CDD');
-
-insert into gerant (id_local, experience, specialite, type_de_contrat)
-    values (5,'Experence de 3 ans','Finance','CDI');
-
-insert into gerant (id_local, experience, specialite, type_de_contrat)
-    values (3,'Experence de 1 ans','Ressources humaines','CDD');
-
-insert into gerant (id_local, experience, specialite, type_de_contrat)
-    values (1,'Experence de 5 ans','Commerce','CDI');
-
---Table agent de securite
-insert into agent_securite(id_local, grade, experience, heures_de_services)
-    values('','','','');
-
-insert into agent_securite(id_local, grade, experience, heures_de_services)
-    values('','','','');
-
-insert into agent_securite(id_local, grade, experience, heures_de_services)
-    values('','','','');
-
-insert into agent_securite(id_local, grade, experience, heures_de_services)
-    values('','','','');
-
-insert into agent_securite(id_local, grade, experience, heures_de_services)
-    values('','','','');
-
-
-
 
 '
 
+---------------------------------------------------------------------------------------
+--Table fournisseur
+---------------------------------------------------------------------------------------
+INSERT INTO `fournisseur` (`id_Fournisseur`, `id_personne`, `ninea`, `agrement`, `registre_de_commerce`)
+VALUES 
+(NULL, '17', 'nin-56521482', 'OUI', 'valide'),
+(NULL, '37', 'nin-21548965', 'oui', 'Valide'), 
+(NULL, '18', 'nin-54698723', 'OUI', 'Valide'), 
+(NULL, '6', 'nin-84652152', 'OUI', 'Valide'), 
+(NULL, '27', 'nin-54982361', 'OUI', 'Valide');
 
+
+---------------------------------------------------------------------------------------
+--Table
+---------------------------------------------------------------------------------------
+INSERT INTO `personne` (`id_personne`, `id_adresse`, `nom_pers`, `prenom_pers`, `mail`, `telephone`, `age`, `sexe`) 
+VALUES 
+(NULL, '11', 'Diallo', 'Aya ', 'DialloAya@gmail.com', '754896524', '12', 'M'), 
+(NULL, '15', 'Seck', 'Mamy', 'SeckMamy@gmail.com', '754862135', '24', 'F'), 
+(NULL, '4', 'Gomis', 'Marie', 'Gomis@gmail.com', '754215895', '26', 'F'), 
+(NULL, '18', 'Sène', 'John', 'JohnSène@gmail.com', '745698523', '25', 'F'), 
+(NULL, '13', 'Sarr', 'Keba', 'Keba@gmail.com', '789654231', '12', 'M'), 
+(NULL, '15', 'Mar', 'Oumar', 'Oumar@gmail.com', '742159856', '28', 'M'), 
+(NULL, '2', 'Diop', 'Abdou', 'Abdou@gmail.com', '745215896', '14', 'M'), 
+(NULL, '16', 'Mane', 'Papis', 'Papis@gmail.com', '756253125', '25', 'M'), 
+(NULL, '16', 'Bouye', 'Abdou', 'abdou@gmail.com', '745215985', '27', 'M'), 
+(NULL, '3', 'Diakite', 'Nabou', 'nabou@gmail.com', '754213598', '13', 'F'), 
+(NULL, '16', 'Rassoul', 'Aicha', 'aicha@gmail.com', '789546325', '21', 'F'), 
+(NULL, '2', 'Mboup', 'Fadel', 'fadel@gmail.com', '745213259', '10', 'M'), 
+(NULL, '13', 'Ba', 'Fatim', 'ba@gmail.com', '712321589', '16', 'F'), 
+(NULL, '2', 'Amar', 'Fallou', 'amar@gmail.com', '723215987', '21', 'M');
+
+---------------------------------------------------------------------------------------
+--Table
+---------------------------------------------------------------------------------------
+INSERT INTO `client` (`id_Client`, `id_personne`) 
+VALUES 
+(NULL, '43'), 
+(NULL, '44'), 
+(NULL, '45'), 
+(NULL, '46'), 
+(NULL, '47'),
+(NULL, '48'), 
+(NULL, '49'), 
+(NULL, '50'), 
+(NULL, '51'), 
+(NULL, '52'), 
+(NULL, '53'), 
+(NULL, '54'), 
+(NULL, '55'), 
+(NULL, '56'), 
+(NULL, '57');
+
+
+---------------------------------------------------------------------------------------
+--Table Livreur
+---------------------------------------------------------------------------------------
+INSERT INTO `livreur` (`id_livreur`, `id_personne`, `nature_permis`, `moyen_de_transport`) 
+VALUES (
+NULL, '48', 'Permis B1', 'Vehicule'), 
+(NULL, '50', 'Permis B2', 'Véhicule'), 
+(NULL, '40', 'Permis A', 'Moto'), 
+(NULL, '36', 'Permis A2', 'Moto'), 
+(NULL, '3', 'Permis B2', 'Véhicule'), 
+(NULL, '56', 'Permis B1', 'Véhicule');
+
+---------------------------------------------------------------------------------------
+--Table Caisse
+---------------------------------------------------------------------------------------
+INSERT INTO `caisse` (`id_caisse`, `id_local`)
+VALUES (NULL, '1'), 
+(NULL, '1'), (NULL, '3'), 
+(NULL, '2'), (NULL, '3'), 
+(NULL, '2'), (NULL, '5'), 
+(NULL, '4'), (NULL, '4'), 
+(NULL, '5');
+
+
+---------------------------------------------------------------------------------------
+--Table Caissier
+---------------------------------------------------------------------------------------
+INSERT INTO `caissier` (`id_caissier`, `id_personne`, `id_caisse`, `experience`) 
+VALUES
+(NULL, '67', '10', '2 années d\'expérience'), 
+(NULL, '66', '9', '5 années d\'expérience'), 
+(NULL, '65', '8', '3 années d\'expérience'), 
+(NULL, '64', '7', '7 années d\'expérience'), 
+(NULL, '63', '6', '4 années d\'expérience'), 
+(NULL, '62', '5', '3 années d\'expérience'), 
+(NULL, '61', '4', '1 ans d\'expérience'), 
+(NULL, '60', '3', '5 années d\'expérience'), 
+(NULL, '59', '2', '3 années d\'expérience'), 
+(NULL, '58', '1', '6 années d\'expérience');
+
+---------------------------------------------------------------------------------------
+--Table Rayon
+---------------------------------------------------------------------------------------
+INSERT INTO `rayon` (`id_rayon`, `id_rayonniste`, `id_local`, `emplacement`, `longueur`, `nombre_de_casier`, `le_type`) 
+VALUES 
+(NULL, '1', '5', 'Zone 1', '120', '100', 'Boulangerie'), 
+(NULL, '2', '4', 'Zone 2', '30', '99', 'Poissonnerie'), 
+(NULL, '3', '3', 'Zone 2', '25', '95', 'Charcuterie'), 
+(NULL, '4', '2', 'Zone B', '19', '120', 'Fruits et Légumes'), 
+(NULL, '5', '1', 'Zone A', '70', '68', 'Pâtisserie');
+
+
+---------------------------------------------------------------------------------------
+--Table Casier
+---------------------------------------------------------------------------------------
+INSERT INTO `casier` (`id_Casier`, `id_rayon`, `dimension`, `position`, `capacite`) 
+VALUES (NULL, '1', '3 m', '1er etage', '50'), 
+(NULL, '2', '2 m', '1er etage', '40'),
+(NULL, '3', '3 m', '2eme étage', '23'), 
+(NULL, '4', '3 m', '3eme étage', '35'), 
+(NULL, '5', '3 m', '2eme étage', '29'), 
+(NULL, '2', '3 m', '1er étage', '54'),
+(NULL, '3', '3 m', '2eme étage', '29'), 
+(NULL, '1', '3 m', '2eme étage', '42'), 
+(NULL, '5', '3 m', '2eme étage', '36'), 
+(NULL, '1', '3 m', '3eme étage', '25');
+---------------------------------------------------------------------------------------
+--Table Article
+---------------------------------------------------------------------------------------
+INSERT INTO `article` (`id_article`, `id_casier`, `nom_article`, `prix_article`, `date_prod`, `date_exp`, `details`) 
+VALUES 
+(NULL, '1', 'Beurre', '2000', '2022-10-03', '2024-10-03', 'Beurre Sofia'), 
+(NULL, '1', 'Riz', '10895', '2022-09-03', '2022-10-03', 'Riz de la vallée'), 
+(NULL, '2', 'Bouteille d\'eau', '1300', '2022-05-03', '2024-04-03', 'Eau minérale'), 
+(NULL, '2', 'Glace', '950', '2022-06-03', '2024-08-03', 'Glace a l\'amandes'), 
+(NULL, '3', 'Jus', '500', '2022-09-05', '2024-10-03', 'Coca Cola'), 
+(NULL, '3', 'Huile', '1000', '2022-05-17', '2024-10-03', 'Jador'), 
+(NULL, '4', 'Café Touba', '500', '2022-12-03', '2024-10-03', 'Café Touba'), 
+(NULL, '4', 'Lait', '400', '2022-10-03', '2024-12-03', 'Nido'), 
+(NULL, '5', 'Sucre', '420', '2022-05-14', '2024-12-17', NULL), 
+(NULL, '6', 'Farine', '600', '2022-02-03', '2024-12-08', 'Fati'), 
+(NULL, '7', 'The', '200', '2022-12-15', '2024-12-06', 'Flecha'), 
+(NULL, '8', 'Petit pois', '652', '2022-12-15', '2024-12-10', 'Le soleil'), 
+(NULL, '9', 'Cereals', '654', '2022-03-15', '2024-02-15', 'Pops'), 
+(NULL, '10', 'Confiture', '500', '2022-02-14', '2024-12-15', 'Confiture brut'), 
+(NULL, '8', 'Miel', '700', '2022-07-14', '2024-02-14', 'Miel brut');
+
+
+---------------------------------------------------------------------------------------
+--Table Categorie
+---------------------------------------------------------------------------------------
+
+INSERT INTO `categorie` (`id_categorie`, `id_article`, `nom_categorie`) 
+VALUES 
+(NULL, '4', 'Gâteaux'), 
+(NULL, '12', 'Aliments d\'origine végétale'), 
+(NULL, '12', 'Conserves'), 
+(NULL, '13', 'Aliments à base de Cereals'), 
+(NULL, '5', 'Fruits au sirop'), 
+(NULL, '5', 'Boissons'), 
+(NULL, '7', 'Petit-déjeuners'), 
+(NULL, '3', 'Water'), 
+(NULL, '9', 'Sucres'), 
+(NULL, '8', 'Frais'), 
+(NULL, '14', 'Amuse-gueules');
+
+
+---------------------------------------------------------------------------------------
+--Table commande
+---------------------------------------------------------------------------------------
+
+
+INSERT INTO `commande` (`id_commande`, `id_livreur`, `id_client`) 
+VALUES 
+(NULL, '1', '1'), 
+(NULL, '2', '13'), 
+(NULL, '3', '15'), 
+(NULL, '4', '10'), 
+(NULL, '5', '2'), 
+(NULL, '4', '14'), 
+(NULL, '6', '8'), 
+(NULL, '5', '10'), 
+(NULL, '4', '14'), 
+(NULL, '5', '3');
+
+---------------------------------------------------------------------------------------
+--Table Facture
+---------------------------------------------------------------------------------------
+
+
+INSERT INTO `facture` (`id_facture`, `id_caisse`, `id_commande`, `date_facture`, `montant_facture`, `montant_donne`, `montant_de_retour`) 
+VALUES (NULL, '1', '10', '2023-01-04', '5000', '10000', '5000'), 
+(NULL, '2', '9', '2023-01-04', '4500', '5000', '500'), 
+(NULL, '3', '8', '2022-09-04', '6500', '10000', '3500'), 
+(NULL, '4', '7', '2023-02-17', '8500', '10000', '1500'), 
+(NULL, '5', '8', '2023-12-08', '9000', '10000', '1000');
+
+'
+ ------||||||||||||||||||||||||||||||--------||||||||||||||||||||||||||||||-----------
+--Modifier un ou plusieurs enregistrement existant
+UPDATE personne SET nom_pers='Kouli baly' where id_personne=1; 
+
+--adresse des rayonnistes
+select p.nom_pers ,  p.prenom_pers, a.region, a.ville ,a.code_postal from personne p,rayonniste r, adresse a where p.id_personne = r.id_personne and p.id_adresse = a.id_adresse;
+
+--nom prenom du rayonniste qui gere le rayon charcuterie
+select p.prenom_pers, p.nom_pers 
+from personne p, rayon r, rayonniste ry 
+where ry.id_rayonniste=r.id_rayonniste and ry.id_personne=p.id_personne and r.le_type='charcuterie';
+
+
+--toutes les articles du fournisseur qui sappelle mamadou ndiaye
+select prenom_pers, nom_pers, nom_article
+from article , fournisseur, personne , fournir 
+where (personne.id_personne=fournisseur.id_personne and article.id_article=fournir.id_article) and
+fournisseur.id_fournisseur=fournir.id_fournisseur  and personne.prenom_pers='S%';
+
+
+--le prix de chaque article achete par Aliou
+select a.prix_article 
+from article a ,personne ps,fournisseur f 
+where (ps.id_personne=f.id_fournisseur and f.id_fournisseur=a.id_article) and (ps.nom_pers='Aliou');
+
+
+
+----------------------------
+--------------------------
+
+select p.nom_pers , p.prenom_pers from personne p , fournisseur f where p.id_personne=f.id_Fournisseur and p.nom_pers='aliou';
+
+--
+--les client qui ont commander le meme produit a une date donne
+select pe.nom_pers, pe.prenom_pers from client cl ,personne pe, fournisseur fo , article ar, commande co, facture fac
+------------------------------------
+--liste des avoirs de tous les client
+
+-- MAME KHADY MBACKE LEYE09:37
+-- les personnes qui ont commander tout les produits(nom,prenom)
+-- Région ou il y'a de client mais pas de local
+
+select p.nom_pers, p.prenom_pers from personne p ,commande c , article a, contenir con, client cl 
+where
+ (cl.id_client=p.id_personne and cl.id_client=c.id_commande) 
+ and  ((c.id_commande=con.id_article and c.id_commande= con.id_commande) and  (con.id_article=a.id_article and con.id_commande= a.id_article ));
+
+
+
+mettez dans une seule colonne que vous nommerez par Nom Complet, 
+tous les noms et prénoms de toutes les personnes,
+ en précisant dans une autre colonne
+  s'il est rayonniste ou pas, ajoutez une autre colonne traitement pour voir s'il
+   peut être pris ou pas, selon son age et son sexe, dans le cas où il est feminin, 
+   si elle a plus de 18 ans, elle peut etre un agent, dans le cas d'un garçon,
+    s'il a plus de 20 ans, il peut etre un agent, et un autre colonne pour afficher sa date de naissance.
+
+select p.nom_pers, p.prenom_pers, p.age ,p.sexe 
+from personne p, rayonniste r , agent_securite ag
+where (p.id_personne=r.id_rayonniste and  p.id_personne=ag.id_agent_sec ) and ( age > 18 and sexe= 'F');
+agen
+
+
+
+Boye Elhadji Abdou10:35
+SELECT nom, prenom,date from personne A, rayonniste B if A.id_personne=B.id_personne 
+then 'oui' else 'non' end as NOM COMPLET if sexe='masculin' when age>20 
+THEN 'c'est bon' ELSE 'c'est pas bon' END AS sexe masculin if sexe='feminin'
+when  age>18 then 'c'est bon' ELSE 'c'est pas bon' END AS sexe feminin FROM personne;
+
+--  Bakar SECK10:13
+-- Donnez le nom, prenom des personnes dans une colonne qui habite dans une région où le nom de la région est un palindrome
+select concat(nom,prenom) 
+from personne ,adresse 
+where personne.idadresse=adresse.idadresse intersect(select case where region=reverse(region));
+
+Bakar SECK10:47
+select concat(prenom_pers, ' ', nom_pers) as NomComplet
+from adresse, personne
+where adresse.id_adresse = personne.id_adresse
+and reverse(region) = region ;
+
+
+Bakar SECK10:50
+select concat(Trim(prenom_pers), ' ', nom_pers) as NomComplet, coalesce(id_rayonniste, "Il n'est pas rayonniste"),
+case 
+  when sexe="F" and age > 18 then "Il peut etre agent"
+  when sexe="M" and age > 20 then "Il peut etre agent"
+  else "Il ne peut être agent"
+end as Traitement
+from personne
+left join rayonniste
+on rayonniste.id_personne = personne.id_personne ;
+
+
+
+
+
+
+
+---------------------------------------------------------------------'
+
+
+Mor Talla Mboup11:18
+Afficher (prenom et nom) des clients des différentes factures.
+liste des fournisseurs (nom,prénom) qui sont en même temps des clients dans une région donnée.
+-------------
+select p.prenom_pers, p.nom_pers
+from personne p, client cl, commande co, facture f
+where (p.id_personne = cl.id_client and cl.id_client= co.id_commande) and (co.id_commande=f.id_facture);
+------------
+select distinct p.prenom_pers, p.nom_pers, a.region
+from personne p, fournisseur f , client cl, adresse a
+where (p.id_personne=f.id_fournisseur and p.id_personne= cl.id_client) ;
+
+
+select distinct p.prenom_pers, p.nom_pers, a.region
+from personne p, fournisseur f , client cl, adresse a
+where (p.id_personne=f.id_fournisseur and p.id_personne= cl.id_client)  and a.region= 'Louga';
+
+
+-------------------------------
+nom et le prenom et le nombre d'article commander par client pour les client ayant commander plus de 2 articles.'
+
+select distinct p.prenom_pers, p.nom_pers, a.region
+from personne p, fournisseur f , client cl, adresse a
+where (p.id_personne=cl.id_personne and p.id_personne= cl.id_personne)  and a.region= 'Louga';
+
+
+donner le nom du du fournisseur  qui a fourni le prix de l'article le plus chers et le nom de l'article
+
+----------------------------------
+
+Bakar SECK11:46
+select nom_pers, prenom_pers
+    from fournisseur, personne, adresse, client
+    where fournisseur.id_personne = personne.id_personne
+    and client.id_personne = personne.id_personne
+    and personne.id_adresse = adresse.id_adresse 
+    and region like 'm%';
+
+
+RAMATOULAYE CAMARA12:40
+SELECT nom,prenom, SUM(nbr_articles) FROM personnel, client, commande WHERE personnel.id_personne = client.id_personne GROUP BY  nom,prenom HAVING SUM(nbr_articles) >= 2;
+MAME KHADY MBACKE LEYE12:40
+select nom,prenom,nomArt from personnes,fournisseur,fournir,article where fournisseur.idPers=personnes.idpersonne and fournisseur.idfourni=fournir.idFournir and fournir.idArt=article.idArt and prix>= all(select prix from article);
+MOMAR TALLA SALLA12:41
+select P.nom,P.prenom A.nombre_article from personne P,client C, commande F,article A
+    -> where P.id_personn=P.idclient and A.id_commande=F.id_article and F.id_client=C.id_client and A.nombre_article > 2;
+select nom , nom_article  from personne C,fournisseur A ,article B where C.id_personne=A.id_personne and B.id_fournisseur=A.id_fournisseur and prix_article >= ALL (SELECT prix_article FROM article);
+RAMATOULAYE CAMARA12:41
+SELECT nom from personnel,fournisseur, articles where personnel.id_personne=fournisseur.id_personne and fournisseur.id_fournisseur=articles.id_fournisseur and prix_article >= all(select prix_article from articles);
+
+--listes des casier d'une rayon
+--les avoirs non rembousse..
+
+ ------||||||||||||||||||||||||||||||--------||||||||||||||||||||||||||||||-----------
+
+------||||||||||||||||||||||||||||||--------||||||||||||||||||||||||||||||-----------
+
+
+
+--les noms des article acheter par les client dune ville donne
+SELECT nom_article
+FROM article 
+JOIN fournir ON fournir.id_article=article.id_article
+JOIN fournisseur ON fournir.id_fournisseur=fournisseur.id_fournisseur
+JOIN  personne ON fournisseur.id_personne=personne.id_personne
+JOIN  adresse ON personne.id_adresse=adresse.id_adresse
+WHERE ville = 'Dakar';
+
+--les client qui sont dans le systeme qui nont pas efectuer dachat et il faut donne leurs region
+
+
+SELECT concat(Trim(prenom_pers), ' ', nom_pers) as NomComplet, id_client
+FROM client
+JOIN personne ON client.id_personne=personne.id_personne
+JOIN  adresse ON personne.id_adresse=adresse.id_adresse
+WHERE client.id_personne NOT IN 
+(SELECT concat(Trim(prenom_pers), ' ', nom_pers) as NomComplet, id_client
+FROM  client 
+JOIN personne  ON client.id_personne=personne.id_personne
+JOIN commande ON commande.id_client=client.id_client
+JOIN facture ON facture.id_commande=commande.id_commande);
+
+
+--le nombre de fois que le produit X est vendu
+
+SELECT COUNT(*)
+FROM 
+WHERE product = 'X'
+
+--liste des client qui ont commande entre deux date_avoir
+
+SELECT concat(Trim(prenom_pers), ' ', nom_pers) as NomComplet
+FROM  client 
+JOIN personne  ON client.id_personne=personne.id_personne
+JOIN commande ON commande.id_client=client.id_client
+JOIN facture ON facture.id_commande=commande.id_commande
+WHERE date_facture BETWEEN '2022-01-01' AND '2022-12-31';
+
+--les 2 clients qui ont commande le plus d'article
+
+SELECT concat(Trim(prenom_pers), ' ', nom_pers) AS total_quantity
+FROM client
+JOIN personne  ON client.id_personne=personne.id_personne
+JOIN commande ON commande.id_client=client.id_client
+JOIN facture ON facture.id_commande=commande.id_commande
+GROUP BY nombre_article
+ORDER BY total_quantity DESC
+LIMIT 2
+
+----------------------------------------------------------------------------------------
+
+
+select concat(Trim(prenom_pers), ' ', nom_pers) as NomComplet,
+case 
+  when sexe="F" and age > 18 then "Il peut etre agent"
+  when sexe="M" and age > 20 then "Il peut etre agent"
+  else "Il ne peut être agent"
+end as Traitement
+from client 
+left join personne
+on rayonniste.id_personne = personne.id_personne ;
 
 
 
